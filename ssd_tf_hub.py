@@ -1,10 +1,8 @@
 import os
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
 import tensorflow as tf
 import tensorflow_hub as hub
-from tensorflow.keras.models import load_model
 
 def draw_boxes(img, boxes, class_names, scores):
 
@@ -31,35 +29,13 @@ def draw_boxes(img, boxes, class_names, scores):
     return img
 
 
-#tf.compat.v1.disable_eager_execution()
-os.environ['TFHUB_CACHE_DIR'] = './hub_directory/tf_cache'
+def inference(img, model):
 
-m_path = 'https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1'
-im_size = (224,224)
-im_path = 'dogs.jpg'
+    recolored = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-model = hub.load(m_path).signatures['default']
+    converted_img  = tf.image.convert_image_dtype(recolored, tf.float32)[tf.newaxis, ...]
+    pred = model(converted_img)
 
-test_im = cv2.imread(im_path)
-test_im = cv2.cvtColor(test_im, cv2.COLOR_BGR2RGB)
-resized= cv2.resize(test_im, im_size)
-x = np.array(resized)
-x = np.expand_dims(x, axis=0)
+    marked = draw_boxes(recolored, pred['detection_boxes'], pred['detection_class_entities'], pred['detection_scores'])
 
-converted_img  = tf.image.convert_image_dtype(resized, tf.float32)[tf.newaxis, ...]
-pred = model(converted_img)
-boxes = pred['detection_boxes']
-print(tuple(boxes[0].numpy()))
-#print(pred)
-
-marked = draw_boxes(test_im, pred['detection_boxes'], pred['detection_class_entities'], pred['detection_scores'])
-
-test_im = cv2.imread(im_path)
-test_im = cv2.cvtColor(test_im, cv2.COLOR_BGR2RGB)
-
-fig, ax = plt.subplots(1,2, figsize=(200,200))
-ax[0].imshow(test_im)
-ax[0].set_title('Raw image')
-ax[1].imshow(marked)
-ax[1].set_title('Marked image')
-plt.show()
+    return marked
