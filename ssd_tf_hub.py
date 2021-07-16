@@ -20,6 +20,7 @@ def draw_boxes(img, boxes, class_names, scores):
 
             label = class_names[i].numpy().decode('ascii')
             mark = label + " {:.2f}%".format(100*scores[i].numpy())
+            logging.info('Obtained predictions for frame: {}'.format(mark))
 
             img = cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0,0,255), 2)
             img = cv2.putText(img, mark, (xmin, ymin-11), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
@@ -35,10 +36,6 @@ def inference(img, model):
     logging.info('Frame preprocessed, now performing inference')
     pred = model(converted_img)
 
-    logging.info('Obtained predictions for frame => class(es): {0} confidence level(s): {1}'.format(
-        pred['detection_class_entities'].numpy().decode('ascii'), 
-        pred['detection_scores'].numpy())
-        )
     marked = draw_boxes(recolored, pred['detection_boxes'], pred['detection_class_entities'], pred['detection_scores'])
 
     return marked

@@ -5,7 +5,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from ssd_tf_hub import inference
 
-logging.basicConfig(format='%(asctime)s // %(Levelname)s : %(message)s', level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)s // %(levelname)s : %(message)s", datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
 
 def gstreamer_pipeline(
     sensor_id=0,
@@ -46,8 +46,8 @@ im_size = (224,224)
 model = hub.load(m_path).signatures['default']
 logging.info('Model successfully loaded')
 
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
-#cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
+cap = cv2.VideoCapture(0)
 
 logging.info('Video streamer initialized')
   
