@@ -7,12 +7,12 @@ from ssd_tf_hub import inference
 def gstreamer_pipeline(
     sensor_id=0,
     #sensor_mode=3,
-    capture_width=1280,
-    capture_height=720,
-    display_width=1280,
-    display_height=720,
-    framerate=60,
-    flip_method=0,
+    capture_width=3280,
+    capture_height=2464,
+    display_width=816,
+    display_height=616,
+    framerate=21/1,
+    flip_method=2,
 ):
     return (
        "nvarguscamerasrc sensor-id=%d ! "
