@@ -6,7 +6,7 @@ from ssd_tf_hub import inference
 
 def gstreamer_pipeline(
     sensor_id=0,
-    sensor_mode=3,
+    #sensor_mode=3,
     capture_width=1280,
     capture_height=720,
     display_width=1280,
@@ -15,7 +15,7 @@ def gstreamer_pipeline(
     flip_method=0,
 ):
     return (
-       "nvarguscamerasrc sensor-id=%d sensor-mode=%d ! "
+       "nvarguscamerasrc sensor-id=%d ! "
         "video/x-raw(memory:NVMM), "
         "width=(int)%d, height=(int)%d, "
         "format=(string)NV12, framerate=(fraction)%d/1 ! "
@@ -25,7 +25,7 @@ def gstreamer_pipeline(
         "video/x-raw, format=(string)BGR ! appsink"
         % (
             sensor_id,
-            sensor_mode,
+            #sensor_mode,
             capture_width,
             capture_height,
             framerate,
@@ -35,7 +35,7 @@ def gstreamer_pipeline(
         )
     )
 
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
 
 os.environ['TFHUB_CACHE_DIR'] = './hub_directory/tf_cache'
 
