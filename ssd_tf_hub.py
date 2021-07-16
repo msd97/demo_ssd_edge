@@ -1,8 +1,6 @@
-import os
-import numpy as np
+import logging
 import cv2
 import tensorflow as tf
-import tensorflow_hub as hub
 
 def draw_boxes(img, boxes, class_names, scores):
 
@@ -34,8 +32,13 @@ def inference(img, model):
     recolored = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     converted_img  = tf.image.convert_image_dtype(recolored, tf.float32)[tf.newaxis, ...]
+    logging.info('Frame preprocessed, now performing inference')
     pred = model(converted_img)
 
+    logging.info('Obtained predictions for frame => class(es): {0} confidence level(s): {1}'.format(
+        pred['detection_class_entities'].numpy().decode('ascii'), 
+        pred['detection_scores'].numpy())
+        )
     marked = draw_boxes(recolored, pred['detection_boxes'], pred['detection_class_entities'], pred['detection_scores'])
 
     return marked
