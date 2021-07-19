@@ -41,7 +41,7 @@ def gstreamer_pipeline(
 
 os.environ['TFHUB_CACHE_DIR'] = './hub_directory/tf_cache'
 
-m_path = 'ssd_mobilenet_v2_2'
+m_path = 'ssd_mobilenet_v2_2_trt'
 im_size = (224,224)
 
 model = tf.saved_model.load(m_path)
