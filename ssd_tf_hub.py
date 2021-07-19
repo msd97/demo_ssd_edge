@@ -28,7 +28,7 @@ def draw_boxes(img, boxes, class_names, scores):
     return img
 
 
-def inference(img, model):
+def inference_hub(img, model):
 
     recolored = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
