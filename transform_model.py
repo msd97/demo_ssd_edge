@@ -15,7 +15,7 @@ if tflite_flag == 1:
 else:
 
   conversion_params = trt.TrtConversionParams(
-    precision_mode=trt.TrtPrecisionMode.FP32)
+    precision_mode=trt.TrtPrecisionMode.FP16)
   
   converter = trt.TrtGraphConverterV2(
     input_saved_model_dir=input_saved_model_dir,
