@@ -2,6 +2,8 @@
 hub_directory/
 dogs.jpg
 test.py
+output_left.avi
+output_right.avi
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
