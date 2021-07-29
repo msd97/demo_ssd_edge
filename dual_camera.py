@@ -53,7 +53,7 @@ class CSI_Camera:
             self.video_capture = cv2.VideoCapture(
                 gstreamer_pipeline_string, cv2.CAP_GSTREAMER
             )
-            self.video_writer = cv2.VideoWriter('output_' + self.id + '.avi', fourcc, 20.0, (640,  480))
+            self.video_writer = cv2.VideoWriter('output_' + self.id + '.avi', fourcc, 20.0, (960,  540))
             
         except RuntimeError:
             self.video_capture = None
@@ -173,7 +173,7 @@ def start_cameras():
         gstreamer_pipeline_string = gstreamer_pipeline(
             sensor_id=0,
             sensor_mode=3,
-            flip_method=1,
+            flip_method=2,
             display_height=540,
             display_width=960,
         ),
@@ -186,7 +186,7 @@ def start_cameras():
         gstreamer_pipeline_string = gstreamer_pipeline(
             sensor_id=1,
             sensor_mode=3,
-            flip_method=1,
+            flip_method=2,
             display_height=540,
             display_width=960,
         ),
