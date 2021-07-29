@@ -2,7 +2,6 @@ import cv2
 import os
 import logging
 import tensorflow as tf
-import tensorflow_hub as hub
 from ssd_tf_hub import inference_hub
 
 logging.basicConfig(format="%(asctime)s // %(levelname)s : %(message)s", datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
