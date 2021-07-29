@@ -27,10 +27,15 @@ right_camera = None
 
 class CSI_Camera:
 
-    def __init__ (self) :
+    def __init__ (self, id) :
+
+        self.id = id
+
         # Initialize instance variables
         # OpenCV video capture element
         self.video_capture = None
+        # OpenCV video writer element
+        self.video_writer = None
         # The last captured image from the camera
         self.frame = None
         self.grabbed = False
@@ -38,13 +43,17 @@ class CSI_Camera:
         self.read_thread = None
         self.read_lock = threading.Lock()
         self.running = False
+        # Video writer thread
+        self.write_thread = None
+        self.write_lock = threading.Lock()
 
 
-    def open(self, gstreamer_pipeline_string):
+    def open(self, gstreamer_pipeline_string, fourcc):
         try:
             self.video_capture = cv2.VideoCapture(
                 gstreamer_pipeline_string, cv2.CAP_GSTREAMER
             )
+            self.video_writer = cv2.VideoWriter('output_' + self.id + '.avi', fourcc, 20.0, (640,  480))
             
         except RuntimeError:
             self.video_capture = None
@@ -63,6 +72,11 @@ class CSI_Camera:
             self.running=True
             self.read_thread = threading.Thread(target=self.updateCamera)
             self.read_thread.start()
+
+            # Starting the video writer
+            self.write_thread = threading.Thread(target=self.updateRecord)
+            self.write_thread.start()
+
         return self
 
     def stop(self):
@@ -81,7 +95,19 @@ class CSI_Camera:
                 print("Could not read image from camera")
         # FIX ME - stop and cleanup thread
         # Something bad happened
-        
+
+    def updateRecord(self):
+
+       while self.running:
+            try:
+                with self.write_lock:
+                    self.video_writer.write(self.frame)
+                    
+            except RuntimeError:
+                print("Could not write image to file")
+        # FIX ME - stop and cleanup thread
+        # Something bad happened
+
 
     def read(self):
         with self.read_lock:
@@ -90,12 +116,21 @@ class CSI_Camera:
         return grabbed, frame
 
     def release(self):
+        # Video reader closure
         if self.video_capture != None:
             self.video_capture.release()
             self.video_capture = None
         # Now kill the thread
         if self.read_thread != None:
             self.read_thread.join()
+        
+        # Video writer closure
+        if self.video_writer != None:
+            self.video_writer.release()
+            self.video_capture = None
+        # Now kill the thread
+        if self.write_thread != None:
+            self.write_thread.join()
 
 
 # Currently there are setting frame rate on CSI Camera on Nano through gstreamer
@@ -133,27 +168,29 @@ def gstreamer_pipeline(
 
 
 def start_cameras():
-    left_camera = CSI_Camera()
+    left_camera = CSI_Camera(id='left')
     left_camera.open(
-        gstreamer_pipeline(
+        gstreamer_pipeline_string = gstreamer_pipeline(
             sensor_id=0,
             sensor_mode=3,
-            flip_method=0,
+            flip_method=1,
             display_height=540,
             display_width=960,
-        )
+        ),
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
     )
     left_camera.start()
 
-    right_camera = CSI_Camera()
+    right_camera = CSI_Camera(id='right')
     right_camera.open(
-        gstreamer_pipeline(
+        gstreamer_pipeline_string = gstreamer_pipeline(
             sensor_id=1,
             sensor_mode=3,
-            flip_method=0,
+            flip_method=1,
             display_height=540,
             display_width=960,
-        )
+        ),
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
     )
     right_camera.start()
 
