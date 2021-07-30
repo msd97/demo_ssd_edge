@@ -2,7 +2,8 @@ Tamaño CMOS: 1/4 pulgadas
 Apertura (F): 2.35
 Longitud focal: 0.124 in.
 Ángulo de visión (diagonal): 160 grados
-Distorsión: <14.3%4 agujeros de tornillo
+Distorsión: <14.3%
+4 agujeros de tornillo
 Se utiliza para fijación
 Proporciona salida de potencia de 3,3 V.
 Dimensiones: 0.984 in x 0.945 in.
