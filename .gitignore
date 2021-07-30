@@ -1,7 +1,7 @@
 # Custom ignores
 hub_directory/
 dogs.jpg
-test.py
+detection_test.py
 output_left.avi
 output_right.avi
 
