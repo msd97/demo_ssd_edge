@@ -4,6 +4,8 @@ import glob
 import argparse
 import sys
 
+from numpy.core.numeric import outer
+
 def gstreamer_pipeline(
     sensor_id=0,
     sensor_mode=3,
@@ -53,6 +55,9 @@ capR = cv2.VideoCapture(gstreamer_pipeline(
             display_width=960,
         ),cv2.CAP_GSTREAMER)
 
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+outL = cv2.VideoWriter('output_left.avi', fourcc, 20.0, (960,  540))
+outR = cv2.VideoWriter('output_right.avi', fourcc, 20.0, (960,  540))
 
 # Use these if you need high resolution.
 # capL.set(3, 1024) # width
@@ -86,6 +91,9 @@ def main():
 
         cv2.imshow('capL', leftFrame)
         cv2.imshow('capR', rightFrame)
+
+        outL.write(leftFrame)
+        outR.write(rightFrame)
 
         key = cv2.waitKey(1)
         if key == ord('q'):
