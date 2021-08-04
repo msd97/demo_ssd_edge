@@ -5,6 +5,7 @@ detection_test.py
 depth_test.py
 output_left.avi
 output_right.avi
+cal_frames/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
