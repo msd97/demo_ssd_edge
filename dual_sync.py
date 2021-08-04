@@ -81,11 +81,8 @@ def main():
         _, rightFrame = capR.retrieve()
 
         # Use if you need high resolution. If you set the camera for high res, you can pass these.
-        # cv2.namedWindow('capL', cv2.WINDOW_NORMAL)
-        # cv2.resizeWindow('capL', 1024, 768)
-
-        # cv2.namedWindow('capR', cv2.WINDOW_NORMAL)
-        # cv2.resizeWindow('capR', 1024, 768)
+        cv2.namedWindow('capL', cv2.WINDOW_AUTOSIZE)
+        cv2.namedWindow('capR', cv2.WINDOW_AUTOSIZE)
 
         cv2.imshow('capL', leftFrame)
         cv2.imshow('capR', rightFrame)
